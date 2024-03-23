@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EQ.Logistica</title>
+
+    
+    <style>
+
+        h2 {
+            display: block;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #calculoForm {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00ffd5;
+            color: #000000;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultados {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+  
+    <div id="calculoForm">
+        <h2>Modelo de Ecuación Logística (conociendo K)</h2>
+        <form>
+            <label for="P0"> Ingresa P(0) o Poblacion inicial: </label>
+            <input type="number" step="any" id="P0" name="P0">
+
+            <label for="t1">Ingresa t(1): </label>
+            <input type="number" step="any" id="t1" name="t1">
+
+            <label for="slUTime">Selecciona las unidades:</label>
+            <select name="slUTime" id="slUTime">
+                <option value="segundos">Segundos</option>
+                <option value="minutos">Minutos</option>
+                <option value="horas">Horas</option>
+                <option value="dias">Días</option>
+                <option value="semanas">Semanas</option>
+                <option value="meses">Meses</option>
+                <option value="years">Años</option>
+            </select>
+            <br>
+            <br>
+            <label for="P1">Ingresa P(t) o P1: </label>
+            <input type="number" step="any" id="P1" name="P1">
+
+            <label for="k">Ingresa k: </label>
+            <input type="number" step="any" id="k" name="k">
+
+            <label for="tdado">Dado el tiempo calcular poblacion: </label>
+            <input type="number" step="any" id="tdado" name="tdado">
+
+            <label for="Pdada">Dada la poblacion calcular el tiempo</label>
+            <input type="number" step="any" id="Pdada" name="Pdada">
+            <button type="button" onclick="calcular()">Calcular</button>
+        </form>
+        
+        <div id="resultados" style="display: none;">
+            <h2>Resultados:</h2>
+            <p id="valorC"></p>
+            <p id="valorR"></p>
+            <p id="tiempo"></p>
+            <p id="poblacion"></p>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            var P0 = parseFloat(document.getElementById('P0').value);
+            var k = parseFloat(document.getElementById('k').value);
+            var t1 = parseFloat(document.getElementById('t1').value);
+            var P1 = parseFloat(document.getElementById('P1').value);
+            var Pdada = parseFloat(document.getElementById('Pdada').value);
+            var tdado = parseFloat(document.getElementById('tdado').value);
+            var unidades = document.getElementById('slUTime').value;
+            
+            console.log(unidades)
+            if (!isNaN(P0) && !isNaN(t1) && !isNaN(t1) && !isNaN(P1)) {
+                
+                var C = (k-P0)/P0;
+                var r  = Math.log(((k/P1) - 1)/C)/(-1*t1)
+               
+                
+                
+                var k_P = k/Pdada;
+                var k_1 = k_P - 1;
+                var k_C = k_1/C;
+                var k_log = Math.log(k_C);
+                var tiempo = k_log/ -r; 
+
+                var poblacion = k/((C*Math.exp(-r*tdado))+1);
+
+                console.log(Math.exp(-1*r*tdado));
+                
+
+                document.getElementById('valorC').textContent = "Valor de C es: " + C.toFixed(2);
+                document.getElementById('valorR').textContent = "Valor de R es: " + r.toFixed(7);
+                document.getElementById('tiempo').textContent = "Dada la población de " + Pdada.toFixed(2) + " La población llegará a este numero en: " + tiempo.toFixed(2) + " " + unidades;
+                document.getElementById('poblacion').textContent = "Dado el tiempo "+tdado+" la población ascenderá a: " + poblacion.toFixed(2);
+
+                document.getElementById('resultados').style.display = 'block';
+            } else {
+                alert("Por favor, complete todos los campos del formulario.");
+            }
+        }
+    </script>
+</body>
+</html>

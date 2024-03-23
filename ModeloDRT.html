@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de cálculo</title>
+
+    
+    <style>
+
+        h2 {
+            display: block;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #calculoForm {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00f7ff;
+            color: #000000;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultados {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+  
+    <div id="calculoForm">
+        <h2>Modelo Decaeimiento Radioactivo (conociendo K)</h2>
+        <form>
+
+            <label for="PM">Ingresa % de Masa: </label>
+            <input type="number" step="any" id="PM" name="PM">
+
+            <label for="t1">Ingresa t1: </label>
+            <input type="number" step="any" id="t1" name="t1">
+
+            <label for="t0">Ingresa t(0): </label>
+            <input type="number" step="any" id="t0" name="t0">
+
+            <label for="M0">Ingresa M(0): </label>
+            <input type="number" step="any" id="M0" name="M0">
+
+            <label for="tdado">Dado el tiempo calcular Temp.: </label>
+            <input type="number" step="any" id="tdado" name="tdado">
+
+            <label for="Mdada">Dada la Temp. calcular el tiempo</label>
+            <input type="number" step="any" id="Mdada" name="Mdada">
+            <button type="button" onclick="calcular()">Calcular</button>
+        </form>
+        
+        <div id="resultados" style="display: none;">
+            <h2>Resultados:</h2>
+            <p id="valorK"></p>
+            <p id="vidaMedia"></p>
+            <p id="tiempo"></p>
+            <p id="porcentajeM"></p>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            var PM = parseFloat(document.getElementById('PM').value);
+            var t1 = parseFloat(document.getElementById('t1').value);
+            var t0 = parseFloat(document.getElementById('t0').value);
+            var M0 = parseFloat(document.getElementById('M0').value);
+            var Mdada = parseFloat(document.getElementById('Mdada').value);
+            var tdado = parseFloat(document.getElementById('tdado').value);
+            
+            if (!isNaN(M0) && !isNaN(tdado) && !isNaN(Mdada)) {
+                var k = Math.log(PM/M0)/(t1*-1);
+                
+                var tiempo = (Math.exp((k*-1)*tdado))*M0;
+                var porcentajeM = Math.log(Mdada/M0)/(k*-1);
+
+                var T = Math.log(2)/k;
+               
+                document.getElementById('valorK').textContent = "Valor de k es: " + k.toFixed(7);
+                document.getElementById('vidaMedia').textContent = "La vida Media del Elemento es: " + T.toFixed(2);
+                document.getElementById('tiempo').textContent = "Dado el tiempo: " + tdado + " su masa es: " + tiempo.toFixed(2);
+                document.getElementById('porcentajeM').textContent = "Dado el % de masa " + Mdada + " el tiempo será: "  + porcentajeM.toFixed(2);
+
+                document.getElementById('resultados').style.display = 'block';
+            } else {
+                alert("Por favor, complete todos los campos del formulario.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de cálculo</title>
+
+    
+    <style>
+
+        h2 {
+            display: block;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #calculoForm {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #3700ff;
+            color: #ffffff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultados {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+  
+    <div id="calculoForm">
+        <h2>Modelo de Crecimiento Poblacional (conociendo K)</h2>
+        <form>
+
+            <label for="k">Ingresa k: </label>
+            <input type="number" step="any" id="k" name="k">
+
+            <label for="t1">Ingresa t(1): </label>
+            <input type="number" step="any" id="t1" name="t1">
+
+            <label for="P1">Ingresa P(1): </label>
+            <input type="number" step="any" id="P1" name="P1">
+
+            <label for="tdado">Dado el tiempo calcular poblacion: </label>
+            <input type="number" step="any" id="tdado" name="tdado">
+
+            <label for="Pdada">Dada la poblacion calcular el tiempo</label>
+            <input type="number" step="any" id="Pdada" name="Pdada">
+            <button type="button" onclick="calcular()">Calcular</button>
+        </form>
+        
+        <div id="resultados" style="display: none;">
+            <h2>Resultados:</h2>
+            <p id="valorC"></p>
+            <p id="valorK"></p>
+            <p id="tiempo"></p>
+            <p id="poblacion"></p>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+           
+            var k = parseFloat(document.getElementById('k').value);
+            var t1 = parseFloat(document.getElementById('t1').value);
+            var P1 = parseFloat(document.getElementById('P1').value);
+            var Pdada = parseFloat(document.getElementById('Pdada').value);
+            var tdado = parseFloat(document.getElementById('tdado').value);
+            
+            if (!isNaN(k) && !isNaN(t1) && !isNaN(P1)) {
+                var C = P1 / Math.exp(k*t1);
+                
+                var tiempo = Math.log(Pdada / C) / k;
+                var poblacion = C * Math.exp(k * tdado);
+
+                document.getElementById('valorC').textContent = "Valor de C es: " + C.toFixed(2);
+                document.getElementById('valorK').textContent = "Valor de k es: " + k.toFixed(2);
+                document.getElementById('tiempo').textContent = "Dada la población determinar el tiempo: " + tiempo.toFixed(2);
+                document.getElementById('poblacion').textContent = "Dado el tiempo calcular la población: " + poblacion.toFixed(2);
+
+                document.getElementById('resultados').style.display = 'block';
+            } else {
+                alert("Por favor, complete todos los campos del formulario.");
+            }
+        }
+    </script>
+</body>
+</html>

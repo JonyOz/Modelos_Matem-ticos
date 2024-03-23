@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de cálculo</title>
+
+    
+    <style>
+
+        h2 {
+            display: block;
+            margin-bottom: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        #calculoForm {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 10px);
+            padding: 8px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00f7ff;
+            color: #000000;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #resultados {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+  
+    <div id="calculoForm">
+        <h2>Modelo Decaeimiento Radioactivo (conociendo K)</h2>
+        <form>
+
+            <label for="T">Ingresa la Vida Media del reactivo: </label>
+            <input type="number" step="any" id="T" name="T">
+
+            <label for="tdado">Dado el tiempo calcular Temp.: </label>
+            <input type="number" step="any" id="tdado" name="tdado">
+
+            <label for="Mdada">Dada la Temp. calcular el tiempo</label>
+            <input type="number" step="any" id="Mdada" name="Mdada">
+            <button type="button" onclick="calcular()">Calcular</button>
+        </form>
+        
+        <div id="resultados" style="display: none;">
+            <h2>Resultados:</h2>
+            <p id="valorK"></p>
+            <p id="tiempo"></p>
+            <p id="porcentajeM"></p>
+        </div>
+    </div>
+
+    <script>
+        function calcular() {
+            var T = parseFloat(document.getElementById('T').value);
+            var Mdada = parseFloat(document.getElementById('Mdada').value);
+            var tdado = parseFloat(document.getElementById('tdado').value);
+            
+            if (!isNaN(T) && !isNaN(tdado) && !isNaN(Mdada)) {
+                var k = Math.log(0.5)/(T*-1);
+
+                var tiempo = (Math.exp((k*-1)*tdado))*100;
+                var porcentajeM = Math.log(Mdada/100)/(k*-1);
+
+               
+                document.getElementById('valorK').textContent = "Valor de k es: " + k.toFixed(7);
+                document.getElementById('tiempo').textContent = "Dada la población determinar el tiempo: " + tiempo.toFixed(2);
+                document.getElementById('porcentajeM').textContent = "Dado el tiempo calcular la población: " + porcentajeM.toFixed(2);
+
+                document.getElementById('resultados').style.display = 'block';
+            } else {
+                alert("Por favor, complete todos los campos del formulario.");
+            }
+        }
+    </script>
+</body>
+</html>
